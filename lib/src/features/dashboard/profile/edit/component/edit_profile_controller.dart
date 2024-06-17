@@ -3,7 +3,6 @@ import 'package:entrance_test/src/utils/string_ext.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 import '../../../../../repositories/user_repository.dart';
 import '../../../../../utils/date_util.dart';
@@ -95,28 +94,48 @@ class EditProfileController extends GetxController {
   }
 
   Future<void> changeImage() async {
-    if (await _requestStoragePermission()) {
-      final picker = ImagePicker();
-      final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
-      if (pickedFile != null) {
-        _profilePictureUrlOrPath.value = pickedFile.path;
-        _isLoadPictureFromPath.value = true;
-      } else {
-        Get.snackbar('Cancelled', 'Image selection was cancelled.');
-      }
-    } else {
-      Get.snackbar('Permission Denied',
-          'You need to grant storage access to change the profile picture.');
-    }
+    _showImageSourceDialog();
   }
 
-  Future<bool> _requestStoragePermission() async {
-    var status = await Permission.storage.status;
-    if (status.isDenied) {
-      status = await Permission.storage.request();
-    }
-    return status.isGranted;
+  Future<void> _showImageSourceDialog() async {
+    final picker = ImagePicker();
+
+    Get.dialog(
+      AlertDialog(
+        title: const Text('Choose Image Source'),
+        content: const Text('Select the source of the image'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () async {
+              Get.back();
+              final pickedFile =
+                  await picker.pickImage(source: ImageSource.camera);
+              if (pickedFile != null) {
+                _profilePictureUrlOrPath.value = pickedFile.path;
+                _isLoadPictureFromPath.value = true;
+              } else {
+                Get.snackbar('Cancelled', 'Image selection was cancelled.');
+              }
+            },
+            child: const Text('Camera'),
+          ),
+          TextButton(
+            onPressed: () async {
+              Get.back();
+              final pickedFile =
+                  await picker.pickImage(source: ImageSource.gallery);
+              if (pickedFile != null) {
+                _profilePictureUrlOrPath.value = pickedFile.path;
+                _isLoadPictureFromPath.value = true;
+              } else {
+                Get.snackbar('Cancelled', 'Image selection was cancelled.');
+              }
+            },
+            child: const Text('Gallery'),
+          ),
+        ],
+      ),
+    );
   }
 
   void onChangeGender(bool isFemale) {
