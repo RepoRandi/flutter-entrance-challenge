@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:entrance_test/src/constants/color.dart';
 import 'package:entrance_test/src/utils/number_ext.dart';
+import 'package:entrance_test/src/widgets/product_review_widget.dart';
+import 'package:entrance_test/src/widgets/user_review_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../constants/icon.dart';
@@ -227,10 +229,48 @@ class ProductDetailPage extends GetView<ProductDetailController> {
                         const SizedBox(height: 24.0),
                         const Column(
                           children: [
-                            Row(),
+                            UserReviewWidget(
+                                imageUrl:
+                                    'https://images.unsplash.com/photo-1631947430066-48c30d57b943?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8Z2lybHxlbnwwfHwwfHx8MA%3D%3D',
+                                userName: 'Amanda Zahra',
+                                rating: 5,
+                                daysAgo: 1),
                             SizedBox(height: 12.0),
+                            ProductReviewWidget(
+                                reviewText:
+                                    'Produk skincare ini sangat membantu menjaga kondisi kulit saya tetap sehat dan terhidrasi sepanjang hari. Saya sangat merekomendasikan produk ini kepada ...')
                           ],
-                        )
+                        ),
+                        const SizedBox(height: 24.0),
+                        const Column(
+                          children: [
+                            UserReviewWidget(
+                                imageUrl:
+                                    'https://images.unsplash.com/photo-1628015081036-0747ec8f077a?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8Z2lybHxlbnwwfHwwfHx8MA%3D%3D',
+                                userName: 'R****a',
+                                rating: 5,
+                                daysAgo: 1),
+                            SizedBox(height: 12.0),
+                            ProductReviewWidget(
+                                reviewText:
+                                    'Saya memiliki kulit sensitif dan cenderung breakout. Namun, setelah mencoba produk skincare ini, kulit saya terlihat jauh lebih sehat dan tidak ada reaksi n... ')
+                          ],
+                        ),
+                        const SizedBox(height: 24.0),
+                        const Column(
+                          children: [
+                            UserReviewWidget(
+                                imageUrl:
+                                    'https://plus.unsplash.com/premium_photo-1673792686302-7555a74de717?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTd8fGdpcmx8ZW58MHx8MHx8fDA%3D',
+                                userName: 'Pevita Ginting',
+                                rating: 4,
+                                daysAgo: 2),
+                            SizedBox(height: 12.0),
+                            ProductReviewWidget(
+                                reviewText:
+                                    'Saya suka konsistensi dari produk skincare ini. Tidak terlalu berat atau lengket, dan cepat meresap ke dalam kulit.')
+                          ],
+                        ),
                       ],
                     ),
                   ),
@@ -244,28 +284,21 @@ class ProductDetailPage extends GetView<ProductDetailController> {
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       ...ratings
-                          .map((rating) => ListTile(
-                                leading: CircleAvatar(
-                                  backgroundImage:
-                                      NetworkImage(rating.userProfilePicture),
+                          .map(
+                            (rating) => Column(
+                              children: [
+                                UserReviewWidget(
+                                  imageUrl: rating.userProfilePicture,
+                                  userName: rating.userName,
+                                  rating: rating.rating,
+                                  daysAgo: int.parse(rating.createdAt),
                                 ),
-                                title: Text(rating.userName),
-                                subtitle: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(rating.review),
-                                    Text(
-                                      'Rating: ${rating.rating}⭐',
-                                      style: const TextStyle(fontSize: 16),
-                                    ),
-                                    Text(
-                                      'Reviewed on: ${rating.createdAt}',
-                                      style: const TextStyle(
-                                          fontSize: 12, color: Colors.grey),
-                                    ),
-                                  ],
-                                ),
-                              ))
+                                const SizedBox(height: 12.0),
+                                ProductReviewWidget(reviewText: rating.review),
+                                const SizedBox(height: 24.0),
+                              ],
+                            ),
+                          )
                           .toList()
                     ],
                   )
