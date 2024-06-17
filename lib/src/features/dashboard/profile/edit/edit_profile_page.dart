@@ -518,12 +518,22 @@ class EditProfilePage extends GetView<EditProfileController> {
                 ),
                 const SizedBox(height: 24),
                 Obx(
-                  () => SizedBox(
-                    height: 52,
-                    width: double.infinity,
-                    child: controller.isLoading
-                        ? const Center(child: CircularProgressIndicator())
-                        : ButtonIcon(
+                  () => controller.isLoading
+                      ? Container(
+                          height: 52,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                              color: primary,
+                              borderRadius: BorderRadius.circular(8.0)),
+                          child: const Center(
+                              child: CircularProgressIndicator(
+                            color: white,
+                          )),
+                        )
+                      : SizedBox(
+                          height: 52,
+                          width: double.infinity,
+                          child: ButtonIcon(
                             buttonColor: primary,
                             textColor: white,
                             textLabel: "Save Changes",
@@ -531,7 +541,7 @@ class EditProfilePage extends GetView<EditProfileController> {
                               controller.saveData();
                             },
                           ),
-                  ),
+                        ),
                 ),
                 const SizedBox(height: 24),
               ],
