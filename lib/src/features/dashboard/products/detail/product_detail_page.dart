@@ -89,69 +89,151 @@ class ProductDetailPage extends GetView<ProductDetailController> {
                     ],
                   ),
                 ),
+                const SizedBox(height: 16.0),
+                Container(
+                  height: 6,
+                  decoration: const BoxDecoration(color: gray100),
+                ),
                 Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(24.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 8),
-                      Text(
-                        'Discounted Price: ${product.discountPrice}',
-                        style:
-                            const TextStyle(fontSize: 20, color: Colors.green),
+                      const Text(
+                        'Product Description',
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: black),
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 8.0),
                       Text(
-                        'Description: ${product.description ?? 'No description available.'}',
-                        style: const TextStyle(fontSize: 16),
+                        product.description ?? 'No description available.',
+                        style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            color: black),
                       ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Return Terms: ${product.returnTerms ?? 'No return terms available.'}',
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Prescription Required: ${product.isPrescriptionDrugs ?? false ? 'Yes' : 'No'}',
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                      const SizedBox(height: 8),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Rating Count: ${product.ratingCount ?? 0}',
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                      const SizedBox(height: 8),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Created At: ${product.createdAt != null ? product.createdAt!.toLocal().toString() : 'N/A'}',
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Updated At: ${product.updatedAt != null ? product.updatedAt!.toLocal().toString() : 'N/A'}',
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                      const SizedBox(height: 8),
-                      if (product.categories != null &&
-                          product.categories!.isNotEmpty)
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'Categories:',
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold),
-                            ),
-                            ...product.categories!.map((category) => Text(
-                                  category.name,
-                                  style: const TextStyle(fontSize: 16),
-                                ))
-                          ],
-                        ),
                     ],
                   ),
                 ),
+                Container(
+                  height: 6,
+                  decoration: const BoxDecoration(color: gray100),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Product Description',
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: black),
+                      ),
+                      const SizedBox(height: 8.0),
+                      RichText(
+                        text: TextSpan(
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.black,
+                          ),
+                          children: product.returnTerms!
+                              .split('\n')
+                              .asMap()
+                              .map((index, text) => MapEntry(
+                                    index,
+                                    TextSpan(
+                                      text: '${index + 1}. $text\n',
+                                    ),
+                                  ))
+                              .values
+                              .toList(),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                Container(
+                  height: 6,
+                  decoration: const BoxDecoration(color: gray100),
+                ),
+                if (ratings.isEmpty)
+                  Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: Column(
+                      children: [
+                        const Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Product Review',
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: black),
+                            ),
+                            Text(
+                              'See More',
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: primary),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8.0),
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons.star,
+                              color: yellow,
+                            ),
+                            const SizedBox(width: 4.0),
+                            Text(
+                              '${product.ratingAverage}',
+                              style: const TextStyle(
+                                  fontSize: 14, fontWeight: FontWeight.w600),
+                            ),
+                            const SizedBox(width: 4.0),
+                            Text(
+                              'from ${product.ratingCount ?? 0} rating)',
+                              style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                  color: gray600),
+                            ),
+                            const SizedBox(width: 4.0),
+                            Container(
+                              height: 4,
+                              width: 4,
+                              decoration: BoxDecoration(
+                                  color: gray600,
+                                  borderRadius: BorderRadius.circular(4)),
+                            ),
+                            const SizedBox(width: 4.0),
+                            Text(
+                              '${product.reviewCount ?? 0} reviews',
+                              style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                  color: gray600),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 24.0),
+                        const Column(
+                          children: [
+                            Row(),
+                            SizedBox(height: 12.0),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
                 if (ratings.isNotEmpty)
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
