@@ -129,7 +129,7 @@ class ProductDetailPage extends GetView<ProductDetailController> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
-                        'Product Description',
+                        'Terms & Conditions of Return / Refund',
                         style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
